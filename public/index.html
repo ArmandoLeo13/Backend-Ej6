@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+<title>Productos</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js" defer></script>
+</head>
+<body>
+  <header>
+  </header>
+  <main>
+    <div class="jumbotron" style="display: flex; flex-direction:column; align-items:center;">
+      <h1>Ingrese Productos</h1>
+      <form id="form">
+        <div>
+          <Label>Nombre de producto:</Label>
+          <input type="text" id="title" name="title" placeholder="Ingrese nombre del producto">
+        </div>
+        <div>
+          <Label>Precio del producto:</Label>
+          <input type="number" id="price" name="price" placeholder="Ingrese precio del producto">
+        </div>
+        <div>
+          <Label>Url de la imagen:</Label>
+          <input type="text" id="url" name="url" placeholder="Ingrese url del producto">
+        </div>
+        <input type="submit" value="Enviar">
+      </form>
+    </div>
+    <div class="jumbotron" style="display: flex; flex-direction:column; align-items:center;">
+      <h1>Vista de Productos</h1>
+      <table class="table table-bordered table-dark">
+          <thead>
+              <tr>
+                  <th scope="col">Nombre del producto</th>
+                  <th scope="col">Precio</th>
+                  <th scope="col">Imagen</th>
+              </tr>
+          </thead>
+          <tbody id="tbody">
+            
+          </tbody>
+      </table>
+    </div>
+    <div class="jumbotron" style="display: flex; flex-direction:column; align-items:center;">
+      <h1>Central de mensajes:</h1>
+      <form id="form2">
+        <div>
+          <Label>Email:</Label>
+          <input type="email" id="email" name="email" placeholder="Ingrese su email">
+        </div>
+        <div>
+          <Label>Mensaje:</Label>
+          <input type="text" id="mensaje" name="mensaje" placeholder="Ingrese su mensaje">
+        </div>
+        <input type="submit" value="Enviar">
+      </form>
+      <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Mensaje</th>
+                <th scope="col">Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody id="tbodym">
+          
+        </tbody>
+    </table>
+    </div>
+  </main>
+</body>
+</html>
