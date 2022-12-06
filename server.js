@@ -1,7 +1,9 @@
 const express = require('express');
 const { Server: SocketServer } = require('socket.io');
 const { Server: HttpServer } = require('http');
-const fs = require('fs');
+const knex = require("knex");
+const mysqlConnection = require('./public/database/mysqlConnection');
+const sqliteConnection = require('./public/database/sqliteConnection');
 
 const app = express();
 
@@ -14,57 +16,64 @@ const io = new SocketServer(httpServer);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const productList = [];
-const mensajes = [];
+class Contenedores {
+  constructor(config, table) {
+    this.database = knex(config);
+    this.table = table;
+  }
+
+  async save(object) {
+    const id = await this.database(this.table).insert(object, ['id']);
+    return id;
+  }
+
+  getById(id) {
+    return this.database.select().from(this.table).where('id', parseInt(id));
+  }
+
+  getAll() {
+    return this.database.select().from(this.table);
+  }
+
+  async deleteById(id) {
+    await this.database(this.table).where('id', id).del();
+    return ;
+  }
+
+  async deleteAll() {
+    await this.database(this.table).del();
+    return ;
+  }
+
+  async update(id, object) {
+    await this.database(this.table).where('id', id).update(object);
+    return ;
+  }
+}
 
 app.use(express.static('public'));
 
-const getAll = async(archivo) => {
-  let contenido 
-  let nuevaData 
-  try{
-      contenido = await fs.promises.readFile(archivo,'utf-8');
-      nuevaData = JSON.parse(contenido);
-  }
-  catch (err){
-      console.log(err);
-  }
-  return nuevaData
-}
+const product = new Contenedores(mysqlConnection,'productos');
+const msg = new Contenedores(sqliteConnection,'mensajes');
 
-const save = async(archivo,object) => {
-  try{
-      let data = await getAll(archivo);          
-      
-      data.push(object);
-
-      let dataFinal = JSON.stringify(data);
-
-      fs.promises.writeFile(archivo,dataFinal);
-      return object.id
-  }
-  catch (err){
-      console.log(err);
-  }
-}
 io.on('connection', (socket) => {
 
-  socket.emit('products', productList);
+  socket.emit('products', product.getAll());
 
   socket.on('newProduct', (newProduct) => {
     
-    save('productos.txt',newProduct);
-    productList.push(newProduct);
+    product.save(newProduct);
+    let productList = product.getAll();
     io.sockets.emit('products', productList);
 
   });
 
-  socket.emit('mensajes', mensajes);
+  socket.emit('mensajes', msg.getAll());
 
   socket.on('newMensaje', (newMensaje) => {
     
-    save('mensajes.txt',newMensaje);
-    mensajes.push(newMensaje);
+    msg.save(newMensaje);
+    let mensajes = msg.getAll();
     io.sockets.emit('mensajes', mensajes);
 
   });
