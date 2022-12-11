@@ -1,6 +1,6 @@
 const knex = require('knex');
 const mysqlConnection = require('./mysqlConnection');
-const sqliteConnection = require('./sqliteConnection');
+
 
 const createProductTable = async () => {
   try {
@@ -22,14 +22,14 @@ const createProductTable = async () => {
 
 const createMessageTable = async () => {
   try {
-    const database = knex(sqliteConnection);
+    const database = knex(mysqlConnection);
     await database.schema.dropTableIfExists('mensajes');
   
     await database.schema.createTable('mensajes', (table) => {
       table.increments('id').primary()
-      table.string('email', 50).notNullable()
-      table.string('text', 255)
-      table.timestamps()
+      table.string('email', 100).notNullable()
+      table.string('mensaje', 255).notNullable()
+      table.string('fhora', 255).notNullable()
     });
   
     console.log('TABLE mensajes created');

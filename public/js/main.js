@@ -49,7 +49,7 @@ form2.addEventListener('submit', (event) => {
   const fhora = fh.getDate()+'/'+(fh.getMonth()+1)+'/'+fh.getFullYear()+' '+fh.getHours()+':'+fh.getMinutes()+':'+fh.getSeconds();
 
   const email = document.getElementById('email').value;
-  const mensaje = document.getElementById('mensaje').value;
-  const msg = { email, mensaje, fhora };
-  socket.emit('newMensaje', msg);
+  const msg = document.getElementById('mensaje').value;
+  const mensaje = { email, msg, fhora };
+  socket.emit('newMensaje', mensaje);
 });
