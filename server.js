@@ -80,7 +80,8 @@ io.on('connection', (socket) => {
   });
 
   (async()=>{
-    mensajes = await product.getAll();
+    mensajes = await msg.getAll();
+    console.log(mensajes);
     socket.emit('mensajes', mensajes);
   })();
   
