@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
     
     (async()=>{
       msg.save(newMensaje);
-      mensajes = await product.getAll();
+      mensajes = await msg.getAll();
       io.sockets.emit('mensajes', mensajes);
     })();
     
